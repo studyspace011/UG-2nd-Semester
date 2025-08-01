@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Study Space</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #6c5ce7;
+            --secondary: #a29bfe;
+            --accent: #fd79a8;
+            --dark: #2d3436;
+            --light: #f5f6fa;
+            --glass: rgba(255, 255, 255, 0.15);
+            --glass-border: rgba(255, 255, 255, 0.2);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: var(--light);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+
+        .welcome-screen {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            max-width: 800px;
+            width: 100%;
+            padding: 40px;
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            border: 1px solid var(--glass-border);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.8s ease-out forwards;
+        }
+
+        .semester-links {
+            margin-top: 10px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+        }
+
+        .semester-links a {
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            padding: 5px 10px;
+            border-radius: 15px;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .semester-links a:hover {
+            text-decoration: underline;
+            color: #ff9ff3;
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .welcome-screen h1 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            font-weight: 700;
+            background: linear-gradient(to right, #fff, #f5f6fa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .welcome-screen h2 {
+            font-size: 1.2rem;
+            font-weight: 400;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+
+        .welcome-screen a {
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .welcome-screen a:hover {
+            text-decoration: underline;
+            color: #ff9ff3;
+        }
+
+        .input-group {
+            width: 100%;
+            max-width: 400px;
+            margin: 15px 0;
+        }
+
+        .input-group label {
+            display: block;
+            text-align: left;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .input-group input, .input-group select {
+            width: 100%;
+            padding: 12px 20px;
+            border-radius: 50px;
+            border: none;
+            background: rgba(255, 255, 255, 0.2);
+            color: var(--light);
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .input-group input:focus, .input-group select:focus {
+            outline: none;
+            background: rgba(255, 255, 255, 0.3);
+            box-shadow: 0 0 0 2px var(--accent);
+        }
+
+        .input-group input::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .input-group select option {
+            background: var(--dark);
+            color: var(--light);
+        }
+
+        .btn {
+            padding: 12px 30px;
+            border-radius: 50px;
+            border: 1px solid var(--glass-border);
+            background: var(--accent);
+            color: white;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(253, 121, 168, 0.4);
+        }
+
+        .btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 20px rgba(253, 121, 168, 0.6);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .main-content {
+            display: none;
+            width: 100%;
+            max-width: 1200px;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.8s ease-out forwards;
+            padding-top: 60px;
+        }
+
+        .greeting {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .greeting h2 {
+            font-size: 2rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .greeting p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .clear-btn {
+            display: block;
+            margin: 20px auto;
+            padding: 10px 25px;
+            border-radius: 50px;
+            border: none;
+            background: #e17055;
+            color: white;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .clear-btn:hover {
+            background: #d63031;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(214, 48, 49, 0.4);
+        }
+
+        .courses-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 25px;
+        }
+
+        .course-card {
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 25px;
+            border: 1px solid var(--glass-border);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            opacity: 0;
+            transform: scale(0.9);
+            animation: fadeInScale 0.5s ease-out forwards;
+            animation-delay: calc(0.1s * var(--index));
+        }
+
+        .course-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .course-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            color: white;
+            font-weight: 600;
+        }
+
+        .course-select {
+            width: 100%;
+            padding: 10px 15px;
+            border-radius: 8px;
+            border: none;
+            background: rgba(255, 255, 255, 0.2);
+            color: var(--light);
+            font-size: 0.95rem;
+            margin-bottom: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .course-select:focus {
+            outline: none;
+            background: rgba(255, 255, 255, 0.3);
+            box-shadow: 0 0 0 2px var(--secondary);
+        }
+
+        .course-select option {
+            background: var(--dark);
+            color: var(--light);
+        }
+
+        .subject-btn {
+            width: 100%;
+            padding: 10px;
+            border-radius: 8px;
+            border: none;
+            background: var(--secondary);
+            color: var(--dark);
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: opacity 0.3s ease-out, transform 0.3s ease-out;
+            margin-top: 10px;
+        }
+
+        .subject-btn:hover {
+            background: var(--primary);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(108, 92, 231, 0.4);
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInScale {
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        @media (max-width: 900px) {
+            .courses-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 600px) {
+            .welcome-screen {
+                padding: 30px 20px;
+            }
+
+            .welcome-screen h1 {
+                font-size: 2rem;
+            }
+
+            .welcome-screen h2 {
+                font-size: 1rem;
+            }
+
+            .courses-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .course-card {
+                padding: 20px;
+            }
+
+            .greeting h2 {
+                font-size: 1.5rem;
+            }
+
+            .semester-links {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .semester-links a {
+                font-size: 0.85rem;
+                padding: 4px 8px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="welcome-screen" id="welcomeScreen">
+        <h1>Welcome to Study Space</h1>
+            <h2>
+              Hope your <strong>1st Semester</strong> went well! Now it’s time for the <strong>2nd Semester</strong> — let’s make it even better.
+              <br><br>
+              This site was created by your senior <strong>Aliya</strong> — not just as a project, but to make your college journey easier.
+              <br><br>
+              By now, you probably know how to navigate everything here. If you ever need help, feel free to message me on Instagram: 
+              <a href="https://instagram.com/itz_aliya._011" target="_blank">@itz_aliya._011</a>
+              <br><br>
+              <span>Not in <strong>2nd Semester?</strong> Choose your semester:</span>
+              <div class="semester-links">
+                  <a href="https://studyspace011.github.io/UG-1st-Semester/">1st Semester</a>
+                  <a href="https://studyspace011.github.io/UG-3rd-Semester/">3rd Semester</a>
+              </div>
+            </h2>
+        <form id="contactForm" onsubmit="return postToGoogle(event);">
+            <div class="input-group">
+                <label for="name">Your Name</label>
+                <input type="text" id="name" name="entry.668301457" placeholder="Your name here..." required>
+            </div>
+            <div class="input-group">
+                <label for="department">Your Department</label>
+                <select id="department" name="entry.719129946" required>
+                    <option value="" disabled selected>Select your department</option>
+                    <option value="Pol-Sci-2">Political Science</option>
+                    <option value="History-2">History</option>
+                    <option value="Economics-2">Economics</option>
+                    <option value="English-2">English</option>
+                    <option value="Hindi-2">Hindi</option>
+                    <option value="Urdu-2">Urdu</option>
+                    <option value="Philosophy-2">Philosophy</option>
+                    <option value="Sociology-2">Sociology</option>
+                    <option value="Psychology-2">Psychology</option>
+                    <option value="Zoology-2">Zoology</option>
+                    <option value="Chemistry-2">Chemistry</option>
+                    <option value="Physics-2">Physics</option>
+                    <option value="Mathematics-2">Mathematics</option>
+                    <option value="Botany-2">Botany</option>
+                </select>
+            </div>
+            <div class="input-group">
+                <label for="rollNo">Your Roll Number</label>
+                <input type="text" id="rollNo" name="entry.2057467438" placeholder="Enter 8-digit roll number..." required>
+            </div>
+            <button type="submit" class="btn"> Let’s Do This</button>
+        </form>
+    </div>
+
+    <div class="main-content" id="mainContent">
+        <div class="greeting">
+            <h2 id="greetingText">Hello, User!</h2>
+            <p>Choose your courses below:</p>
+        </div>
+        <div class="courses-grid" id="coursesGrid"></div>
+        <button class="clear-btn" id="clearBtn">Clear All Selected Subjects</button>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const welcomeScreen = document.getElementById('welcomeScreen');
+            const mainContent = document.getElementById('mainContent');
+            const greetingText = document.getElementById('greetingText');
+            const coursesGrid = document.getElementById('coursesGrid');
+            const clearBtn = document.getElementById('clearBtn');
+
+            const courses = [
+                {
+                    id: 'mjc',
+                    name: 'MJC',
+                    subjects: ['Pol-Sci', 'History', 'Economics', 'English', 'Hindi', 'Urdu', 'Philosophy', 'Sociology', 'Psychology', 'Zoology', 'Chemistry', 'Physics', 'Mathematics', 'Botany']
+                },
+                {
+                    id: 'mic',
+                    name: 'MIC',
+                    subjects: ['MIC-History', 'MIC-Pol-sci', 'MIC-Urdu', 'MIC-Economics', 'MIC-Hindi', 'MIC-English', 'MIC-Geography', 'MIC-Philosophy', 'MIC-Zoology', 'MIC-Chemistry', 'MIC-Physics', 'MIC-Botany']
+                },
+                {
+                    id: 'mdc',
+                    name: 'MDC',
+                    subjects: ['MDC-History', 'MDC-Pol-sci', 'MIC-Urdu', 'MDC-Economics', 'MDC-Hindi', 'MDC-English', 'MDC-Geography', 'MDC-Philosophy', 'MDC-Zoology', 'MDC-Chemistry', 'MDC-Physics', 'MDC-Botany']
+                },
+                {
+                    id: 'sec',
+                    name: 'SEC',
+                    subjects: ['Personality-Development-&-Communication']
+                },
+                {
+                    id: 'aec',
+                    name: 'AEC',
+                    subjects: ['Environmental-Science']
+                },
+                {
+                    id: 'vac',
+                    name: 'VAC',
+                    subjects: ['Constitutional-Values-&-Fuandamental-Duties']
+                }
+            ];
+
+            // --- NEW: Centralized List of AVAILABLE HTML Subject Pages ---
+            // Update this list ONLY when you create/delete a subject's dedicated HTML page.
+            // Ensure subject names match exactly what's in data-subject attributes or select options.
+            const availableSubjectPages = [
+                "MJC-1 History",
+                "MJC-1 Political Science",
+                "MJC-1 Economics"
+                // Add all other subjects for which you have corresponding HTML files (e.g., MJC-1_History.html)
+                // Examples from your provided list that MIGHT have pages:
+                "AEC-1", "AEC-2", "AEC-3", "AEC-4",
+                "INT-1",
+                "MDC-1", "MDC-2", "MDC-3",
+                "MIC-1", "MIC-2", "MIC-3", "MIC-4", "MIC-5", "MIC-6", "MIC-7", "MIC-8", "MIC-9", "MIC-10",
+                "MJC-1", "MJC-2", "MJC-3", "MJC-4", "MJC-5", "MJC-6", "MJC-7", "MJC-8", "MJC-9", "MJC-10", "MJC-11", "MJC-12", "MJC-13", "MJC-14", "MJC-15", "MJC-16",
+                "SEC-1", "SEC-2", "SEC-3",
+                // REMEMBER: Only add subjects here if their HTML file exists.
+            ].map(subject => subject.toLowerCase()); // Convert to lowercase for case-insensitive check
+
+            function sanitizeInput(input) {
+                const div = document.createElement('div');
+                div.textContent = input;
+                return div.innerHTML;
+            }
+
+            // Check if user already has a saved name
+            const savedName = localStorage.getItem('userName');
+            const savedRollNo = localStorage.getItem('userRollNo');
+            if (savedName && savedRollNo) {
+                welcomeScreen.style.display = 'none';
+                mainContent.style.display = 'block';
+                greetingText.textContent = `Hello, ${sanitizeInput(savedName)}!`;
+                generateCourseCards();
+            }
+
+            function postToGoogle(event) {
+                if (event) event.preventDefault();
+
+                const name = document.getElementById('name').value.trim();
+                const department = document.getElementById('department').value.trim();
+                const rollNo = document.getElementById('rollNo').value.trim();
+
+                if (!name || !department || !rollNo) {
+                    alert("Please fill all fields.");
+                    return false;
+                }
+
+                // Validate Roll No: exactly 8 digits
+                if (rollNo.length !== 8 || isNaN(rollNo)) {
+                    alert("Roll number must be exactly 8 digits.");
+                    document.getElementById('rollNo').focus();
+                    return false;
+                }
+
+                // Check for duplicate Roll No in Local Storage
+                const existingRollNos = JSON.parse(localStorage.getItem('rollNos') || '[]');
+                if (existingRollNos.includes(rollNo)) {
+                    alert("This roll number is already registered. Please use a different one.");
+                    document.getElementById('rollNo').focus();
+                    return false;
+                }
+
+                const formData = new FormData();
+                formData.append("entry.668301457", name);
+                formData.append("entry.719129946", department);
+                formData.append("entry.2057467438", rollNo);
+
+                fetch("https://docs.google.com/forms/d/e/1FAIpQLSdZAGfjU4jjojVuWEfZ8QbErl0yzXLZBzXWvh5FnLHp2vbrkw/formResponse", {
+                    method: "POST",
+                    mode: "no-cors",
+                    body: formData
+                }).then(() => {
+                    // Save new Roll No to prevent duplicates
+                    existingRollNos.push(rollNo);
+                    localStorage.setItem('rollNos', JSON.stringify(existingRollNos));
+                    localStorage.setItem("userName", name);
+                    localStorage.setItem("userRollNo", rollNo);
+
+                    document.getElementById("welcomeScreen").style.display = "none";
+                    document.getElementById("mainContent").style.display = "block";
+                    document.getElementById("greetingText").textContent = `Hello, ${name}!`;
+                    generateCourseCards();
+                }).catch((error) => {
+                    console.error("Error!", error);
+                    alert("Submission failed.");
+                });
+
+                return false;
+            }
+
+            document.getElementById("contactForm").addEventListener("submit", postToGoogle);
+
+            function generateCourseCards() {
+                coursesGrid.innerHTML = '';
+                
+                courses.forEach((course, index) => {
+                    const card = document.createElement('div');
+                    card.className = 'course-card';
+                    card.style.setProperty('--index', index);
+                    
+                    const savedSubject = localStorage.getItem(course.id);
+                    
+                    card.innerHTML = `
+                        <h3>${course.name}</h3>
+                        <select class="course-select" id="${course.id}-select" ${savedSubject ? 'disabled' : ''}>
+                            <option value="" disabled selected>Select a subject</option>
+                            ${course.subjects.map(subject => 
+                                `<option value="${subject}" ${savedSubject === subject ? 'selected' : ''}>${subject}</option>`
+                            ).join('')}
+                        </select>
+                        ${savedSubject ? 
+                            `<button class="subject-btn" data-subject="${savedSubject}">Open ${savedSubject} Page</button>` : 
+                            ''}
+                    `;
+                    
+                    coursesGrid.appendChild(card);
+                    
+                    const select = card.querySelector(`#${course.id}-select`);
+                    select.addEventListener('change', function() {
+                        const subject = this.value;
+                        if (subject) {
+                            try {
+                                localStorage.setItem(course.id, subject);
+                                this.disabled = true;
+                                
+                                const btn = document.createElement('button');
+                                btn.className = 'subject-btn';
+                                btn.textContent = `Open ${subject} Page`;
+                                btn.dataset.subject = subject;
+                                
+                                // --- MODIFIED: Subject Button Click Logic ---
+                                btn.addEventListener('click', function() {
+                                    const subjectName = this.dataset.subject; // e.g., "MJC-1 History"
+                                    const lowerCaseSubjectName = subjectName.toLowerCase();
+
+                                    // Check if the subject's page is available in our centralized list
+                                    if (availableSubjectPages.includes(lowerCaseSubjectName)) {
+                                        // If available, redirect to the subject's HTML page
+                                        const fileName = subjectName.replace(/ /g, '_') + '.html';
+                                        window.location.href = fileName;
+                                    } else {
+                                        // If NOT available, redirect to the Subject Request Form
+                                        // Pass the requested subject name as a URL parameter
+                                        const redirectToFormUrl = `subject_request_form.html?requestedSubject=${encodeURIComponent(subjectName)}`;
+                                        window.location.href = redirectToFormUrl;
+                                    }
+                                });
+                                // --- END MODIFIED ---
+                                
+                                this.parentNode.appendChild(btn);
+                                btn.style.opacity = '0';
+                                btn.style.transform = 'translateY(10px)';
+                                btn.style.transition = 'opacity 0.3s ease-out, transform 0.3s ease-out';
+                                
+                                requestAnimationFrame(() => {
+                                    btn.style.opacity = '1';
+                                    btn.style.transform = 'translateY(0)';
+                                });
+                            } catch (e) {
+                                console.error('Error in subject selection:', e);
+                                alert('An error occurred while selecting the subject.');
+                            }
+                        }
+                    });
+                    
+                    const existingBtn = card.querySelector('.subject-btn');
+                    if (existingBtn) {
+                        // --- MODIFIED: Existing Subject Button Click Logic ---
+                        existingBtn.addEventListener('click', function() {
+                            const subjectName = this.dataset.subject;
+                            const lowerCaseSubjectName = subjectName.toLowerCase();
+
+                            if (availableSubjectPages.includes(lowerCaseSubjectName)) {
+                                const fileName = subjectName.replace(/ /g, '_') + '.html';
+                                window.location.href = fileName;
+                            } else {
+                                const redirectToFormUrl = `subject_request_form.html?requestedSubject=${encodeURIComponent(subjectName)}`;
+                                window.location.href = redirectToFormUrl;
+                            }
+                        });
+                        // --- END MODIFIED ---
+                    }
+                });
+            }
+
+            // Clear all selected subjects
+            clearBtn.addEventListener('click', function() {
+                if (confirm('Are you sure you want to clear all selected subjects?')) {
+                    try {
+                        courses.forEach(course => {
+                            localStorage.removeItem(course.id);
+                        });
+                        generateCourseCards();
+                    } catch (e) {
+                        console.error('Error clearing selections:', e);
+                        alert('An error occurred while clearing selections.');
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>
