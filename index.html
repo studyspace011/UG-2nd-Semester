@@ -4,9 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Study Space</title>
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
     <style>
         :root {
             --primary: #6c5ce7;
@@ -56,6 +58,34 @@
             animation: fadeInUp 0.8s ease-out forwards;
         }
 
+        .welcome-screen h1 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            font-weight: 700;
+            background: linear-gradient(to right, #fff, #f5f6fa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .welcome-screen h2 {
+            font-size: 1.2rem;
+            font-weight: 400;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+        
+        .welcome-screen a {
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .welcome-screen a:hover {
+            text-decoration: underline;
+            color: #ff9ff3;
+        }
+
         .semester-links {
             margin-top: 10px;
             display: flex;
@@ -79,34 +109,6 @@
             text-decoration: underline;
             color: #ff9ff3;
             background: rgba(255, 255, 255, 0.2);
-        }
-
-        .welcome-screen h1 {
-            font-size: 2.5rem;
-            margin-bottom: 20px;
-            font-weight: 700;
-            background: linear-gradient(to right, #fff, #f5f6fa);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .welcome-screen h2 {
-            font-size: 1.2rem;
-            font-weight: 400;
-            margin-bottom: 30px;
-            line-height: 1.6;
-        }
-
-        .welcome-screen a {
-            color: var(--accent);
-            text-decoration: none;
-            font-weight: 600;
-            transition: all 0.3s ease;
-        }
-
-        .welcome-screen a:hover {
-            text-decoration: underline;
-            color: #ff9ff3;
         }
 
         .input-group {
@@ -162,7 +164,7 @@
         }
 
         .btn:hover {
-            transform: translateY(-1px);
+            transform: translateY(-3px);
             box-shadow: 0 6px 20px rgba(253, 121, 168, 0.6);
         }
 
@@ -215,6 +217,42 @@
             transform: translateY(-2px);
             box-shadow: 0 4px 15px rgba(214, 48, 49, 0.4);
         }
+        
+        /* Added new semester navigation styles */
+        .semester-navigation {
+            text-align: center;
+            margin-top: 20px;
+            margin-bottom: 40px;
+            padding: 15px;
+            background: var(--glass);
+            border-radius: 15px;
+            border: 1px solid var(--glass-border);
+        }
+
+        .semester-navigation p {
+            margin-bottom: 10px;
+            font-size: 1rem;
+            font-weight: 500;
+        }
+
+        .semester-navigation a {
+            display: inline-block;
+            margin: 5px;
+            padding: 8px 18px;
+            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.2);
+            color: var(--light);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .semester-navigation a:hover {
+            background: var(--secondary);
+            color: var(--dark);
+            transform: scale(1.05);
+        }
+
 
         .courses-grid {
             display: grid;
@@ -358,6 +396,7 @@
     </style>
 </head>
 <body>
+
     <div class="welcome-screen" id="welcomeScreen">
         <h1>Welcome to Study Space</h1>
             <h2>
@@ -403,7 +442,7 @@
                 <label for="rollNo">Your Roll Number</label>
                 <input type="text" id="rollNo" name="entry.2057467438" placeholder="Enter 8-digit roll number..." required>
             </div>
-            <button type="submit" class="btn"> Let’s Do This</button>
+            <button type="submit" class="btn">To chliye suru krte he</button>
         </form>
     </div>
 
@@ -414,6 +453,12 @@
         </div>
         <div class="courses-grid" id="coursesGrid"></div>
         <button class="clear-btn" id="clearBtn">Clear All Selected Subjects</button>
+        
+        <div class="semester-navigation">
+            <p>Switch to a different semester:</p>
+            <a href="https://studyspace011.github.io/UG-1st-Semester/">1st Semester</a>
+            <a href="https://studyspace011.github.io/UG-3rd-Semester/">3rd Semester</a>
+        </div>
     </div>
 
     <script>
@@ -423,6 +468,7 @@
             const greetingText = document.getElementById('greetingText');
             const coursesGrid = document.getElementById('coursesGrid');
             const clearBtn = document.getElementById('clearBtn');
+            const contactForm = document.getElementById('contactForm');
 
             const courses = [
                 {
@@ -443,37 +489,19 @@
                 {
                     id: 'sec',
                     name: 'SEC',
-                    subjects: ['Personality-Development-&-Communication']
+                    subjects: ['Communication-in-Everyday-Life']
                 },
                 {
                     id: 'aec',
                     name: 'AEC',
-                    subjects: ['Environmental-Science']
+                    subjects: ['MIL-English-Communication', 'MIL-Hindi']
                 },
                 {
                     id: 'vac',
                     name: 'VAC',
-                    subjects: ['Constitutional-Values-&-Fuandamental-Duties']
+                    subjects: [' Swachh-Bharat']
                 }
             ];
-
-            // --- NEW: Centralized List of AVAILABLE HTML Subject Pages ---
-            // Update this list ONLY when you create/delete a subject's dedicated HTML page.
-            // Ensure subject names match exactly what's in data-subject attributes or select options.
-            const availableSubjectPages = [
-                "MJC-1 History",
-                "MJC-1 Political Science",
-                "MJC-1 Economics"
-                // Add all other subjects for which you have corresponding HTML files (e.g., MJC-1_History.html)
-                // Examples from your provided list that MIGHT have pages:
-                "AEC-1", "AEC-2", "AEC-3", "AEC-4",
-                "INT-1",
-                "MDC-1", "MDC-2", "MDC-3",
-                "MIC-1", "MIC-2", "MIC-3", "MIC-4", "MIC-5", "MIC-6", "MIC-7", "MIC-8", "MIC-9", "MIC-10",
-                "MJC-1", "MJC-2", "MJC-3", "MJC-4", "MJC-5", "MJC-6", "MJC-7", "MJC-8", "MJC-9", "MJC-10", "MJC-11", "MJC-12", "MJC-13", "MJC-14", "MJC-15", "MJC-16",
-                "SEC-1", "SEC-2", "SEC-3",
-                // REMEMBER: Only add subjects here if their HTML file exists.
-            ].map(subject => subject.toLowerCase()); // Convert to lowercase for case-insensitive check
 
             function sanitizeInput(input) {
                 const div = document.createElement('div');
@@ -481,7 +509,6 @@
                 return div.innerHTML;
             }
 
-            // Check if user already has a saved name
             const savedName = localStorage.getItem('userName');
             const savedRollNo = localStorage.getItem('userRollNo');
             if (savedName && savedRollNo) {
@@ -492,7 +519,7 @@
             }
 
             function postToGoogle(event) {
-                if (event) event.preventDefault();
+                event.preventDefault();
 
                 const name = document.getElementById('name').value.trim();
                 const department = document.getElementById('department').value.trim();
@@ -503,14 +530,12 @@
                     return false;
                 }
 
-                // Validate Roll No: exactly 8 digits
                 if (rollNo.length !== 8 || isNaN(rollNo)) {
                     alert("Roll number must be exactly 8 digits.");
                     document.getElementById('rollNo').focus();
                     return false;
                 }
 
-                // Check for duplicate Roll No in Local Storage
                 const existingRollNos = JSON.parse(localStorage.getItem('rollNos') || '[]');
                 if (existingRollNos.includes(rollNo)) {
                     alert("This roll number is already registered. Please use a different one.");
@@ -527,18 +552,19 @@
                     method: "POST",
                     mode: "no-cors",
                     body: formData
-                }).then(() => {
-                    // Save new Roll No to prevent duplicates
+                })
+                .then(() => {
                     existingRollNos.push(rollNo);
                     localStorage.setItem('rollNos', JSON.stringify(existingRollNos));
                     localStorage.setItem("userName", name);
                     localStorage.setItem("userRollNo", rollNo);
 
-                    document.getElementById("welcomeScreen").style.display = "none";
-                    document.getElementById("mainContent").style.display = "block";
-                    document.getElementById("greetingText").textContent = `Hello, ${name}!`;
+                    welcomeScreen.style.display = "none";
+                    mainContent.style.display = "block";
+                    greetingText.textContent = `Hello, ${name}!`;
                     generateCourseCards();
-                }).catch((error) => {
+                })
+                .catch((error) => {
                     console.error("Error!", error);
                     alert("Submission failed.");
                 });
@@ -546,33 +572,31 @@
                 return false;
             }
 
-            document.getElementById("contactForm").addEventListener("submit", postToGoogle);
+            contactForm.addEventListener("submit", postToGoogle);
 
             function generateCourseCards() {
                 coursesGrid.innerHTML = '';
-                
+
                 courses.forEach((course, index) => {
                     const card = document.createElement('div');
                     card.className = 'course-card';
                     card.style.setProperty('--index', index);
-                    
+
                     const savedSubject = localStorage.getItem(course.id);
-                    
+
                     card.innerHTML = `
                         <h3>${course.name}</h3>
                         <select class="course-select" id="${course.id}-select" ${savedSubject ? 'disabled' : ''}>
-                            <option value="" disabled selected>Select a subject</option>
-                            ${course.subjects.map(subject => 
+                            <option value="" disabled ${!savedSubject ? 'selected' : ''}>Select a subject</option>
+                            ${course.subjects.map(subject =>
                                 `<option value="${subject}" ${savedSubject === subject ? 'selected' : ''}>${subject}</option>`
                             ).join('')}
                         </select>
-                        ${savedSubject ? 
-                            `<button class="subject-btn" data-subject="${savedSubject}">Open ${savedSubject} Page</button>` : 
-                            ''}
+                        ${savedSubject ? `<button class="subject-btn" data-subject="${savedSubject}">Open ${savedSubject} Page</button>` : ''}
                     `;
-                    
+
                     coursesGrid.appendChild(card);
-                    
+
                     const select = card.querySelector(`#${course.id}-select`);
                     select.addEventListener('change', function() {
                         const subject = this.value;
@@ -580,36 +604,23 @@
                             try {
                                 localStorage.setItem(course.id, subject);
                                 this.disabled = true;
-                                
+
                                 const btn = document.createElement('button');
                                 btn.className = 'subject-btn';
                                 btn.textContent = `Open ${subject} Page`;
                                 btn.dataset.subject = subject;
-                                
-                                // --- MODIFIED: Subject Button Click Logic ---
-                                btn.addEventListener('click', function() {
-                                    const subjectName = this.dataset.subject; // e.g., "MJC-1 History"
-                                    const lowerCaseSubjectName = subjectName.toLowerCase();
 
-                                    // Check if the subject's page is available in our centralized list
-                                    if (availableSubjectPages.includes(lowerCaseSubjectName)) {
-                                        // If available, redirect to the subject's HTML page
-                                        const fileName = subjectName.replace(/ /g, '_') + '.html';
-                                        window.location.href = fileName;
-                                    } else {
-                                        // If NOT available, redirect to the Subject Request Form
-                                        // Pass the requested subject name as a URL parameter
-                                        const redirectToFormUrl = `subject_request_form.html?requestedSubject=${encodeURIComponent(subjectName)}`;
-                                        window.location.href = redirectToFormUrl;
-                                    }
+                                btn.addEventListener('click', function() {
+                                    const subjectName = this.dataset.subject;
+                                    const fileName = subjectName.replace(/ /g, '_') + '.html';
+                                    window.location.href = fileName;
                                 });
-                                // --- END MODIFIED ---
-                                
+
                                 this.parentNode.appendChild(btn);
                                 btn.style.opacity = '0';
                                 btn.style.transform = 'translateY(10px)';
                                 btn.style.transition = 'opacity 0.3s ease-out, transform 0.3s ease-out';
-                                
+
                                 requestAnimationFrame(() => {
                                     btn.style.opacity = '1';
                                     btn.style.transform = 'translateY(0)';
@@ -620,28 +631,18 @@
                             }
                         }
                     });
-                    
+
                     const existingBtn = card.querySelector('.subject-btn');
                     if (existingBtn) {
-                        // --- MODIFIED: Existing Subject Button Click Logic ---
                         existingBtn.addEventListener('click', function() {
                             const subjectName = this.dataset.subject;
-                            const lowerCaseSubjectName = subjectName.toLowerCase();
-
-                            if (availableSubjectPages.includes(lowerCaseSubjectName)) {
-                                const fileName = subjectName.replace(/ /g, '_') + '.html';
-                                window.location.href = fileName;
-                            } else {
-                                const redirectToFormUrl = `subject_request_form.html?requestedSubject=${encodeURIComponent(subjectName)}`;
-                                window.location.href = redirectToFormUrl;
-                            }
+                            const fileName = subjectName.replace(/ /g, '_') + '.html';
+                            window.location.href = fileName;
                         });
-                        // --- END MODIFIED ---
                     }
                 });
             }
 
-            // Clear all selected subjects
             clearBtn.addEventListener('click', function() {
                 if (confirm('Are you sure you want to clear all selected subjects?')) {
                     try {
