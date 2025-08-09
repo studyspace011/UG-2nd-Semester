@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Study Space Subject Request Form</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* CSS Variables for consistent theming */
+        :root {
+            --primary: #6c5ce7;
+            --secondary: #a29bfe;
+            --accent: #fd79a8;
+            --dark: #2d3436;
+            --light: #f5f6fa;
+            --glass: rgba(255, 255, 255, 0.15);
+            --glass-border: rgba(255, 255, 255, 0.2);
+        }
+
+        /* Universal Box-sizing and Font-family */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        /* Body Styling for Centering and Background */
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: var(--light);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px; /* Add some padding for smaller screens */
+        }
+
+        /* Welcome Screen / Form Container Styling */
+        .welcome-screen {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            max-width: 800px; /* Max width for readability */
+            width: 100%; /* Full width on smaller screens */
+            padding: 40px;
+            background: var(--glass); /* Glassmorphism effect */
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            border: 1px solid var(--glass-border);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            opacity: 0; /* Hidden for initial animation */
+            transform: translateY(20px); /* Slightly off-set for animation */
+            animation: fadeInUp 0.8s ease-out forwards; /* Fade-in animation */
+        }
+
+        .welcome-screen h1 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            font-weight: 700;
+            background: linear-gradient(to right, #fff, #f5f6fa); /* Gradient text */
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .welcome-screen p {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+            line-height: 1.6;
+            color: rgba(255, 255, 255, 0.9);
+            opacity: 0; /* Hidden for delayed animation */
+            animation: fadeInUp 1s ease-out forwards 0.3s; /* Delayed fade-in */
+        }
+
+        /* Input Group Styling */
+        .input-group {
+            width: 100%;
+            max-width: 400px;
+            margin: 15px 0;
+        }
+
+        .input-group label {
+            display: block;
+            text-align: left;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .input-group input, .input-group select {
+            width: 100%;
+            padding: 12px 20px;
+            border-radius: 10px;
+            border: none;
+            background: rgba(255, 255, 255, 0.2); /* Translucent background */
+            color: var(--light);
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .input-group input:focus, .input-group select:focus {
+            outline: none;
+            background: rgba(255, 255, 255, 0.3);
+            box-shadow: 0 0 0 2px var(--accent); /* Accent border on focus */
+        }
+
+        .input-group input::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        /* Styling for select options */
+        .input-group select option {
+            background: var(--dark); /* Dark background for dropdown options */
+            color: var(--light);
+        }
+
+        /* Validation Message Styling */
+        .validation-message {
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-top: 5px;
+            text-align: left;
+            display: none; /* Hidden by default, shown by JS */
+            transition: color 0.3s ease; /* Smooth color transition */
+        }
+
+        .validation-message.available {
+            color: greenyellow; /* Green for available subjects */
+        }
+
+        .validation-message.not-available {
+            color: var(--accent); /* Accent color for not available subjects */
+        }
+
+        /* Button Styling */
+        .btn {
+            padding: 12px 30px;
+            border-radius: 50px; /* Pill shape */
+            border: 1px solid var(--glass-border);
+            background: var(--accent);
+            color: white;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(253, 121, 168, 0.4);
+        }
+
+        .btn:hover {
+            transform: translateY(-3px); /* Lift on hover */
+            box-shadow: 0 6px 20px rgba(253, 121, 168, 0.6);
+        }
+
+        .btn:active {
+            transform: translateY(0); /* Press effect */
+        }
+
+        /* Popup Styling */
+        .popup {
+            display: none; /* Hidden by default */
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: var(--accent);
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px solid var(--glass-border);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+            text-align: center;
+            opacity: 0; /* Hidden for animation */
+            animation: popupFadeIn 0.5s ease-out forwards; /* Fade-in animation */
+        }
+
+        .popup p {
+            margin: 0 0 15px 0;
+            color: var(--light);
+        }
+
+        .popup .btn {
+            margin-top: 10px;
+        }
+
+        /* Keyframe Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes popupFadeIn {
+            from {
+                opacity: 0;
+                transform: translate(-50%, -60%) scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1);
+            }
+        }
+
+        /* Responsive Design for smaller screens */
+        @media (max-width: 600px) {
+            .welcome-screen {
+                padding: 30px 20px;
+            }
+
+            .welcome-screen h1 {
+                font-size: 2rem;
+            }
+
+            .welcome-screen p {
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="welcome-screen" id="welcomeScreen">
+        <h1>Subject Request Form</h1>
+        <p>Is subject ke notes or syllabus abhi ready nhi hua he. Agar aapko iski jarurat av he to, niche diye hue form ko bhar de or 2-3 din ka wait kare.</p>
+        
+        <form id="subjectForm" action="https://docs.google.com/forms/d/e/1FAIpQLSf17DbiRsK1YBDL97LYWLYdUfScT1FlfbDQ28226XQSNcGxTQ/formResponse" method="POST" target="hiddenIframe">
+            <div class="input-group">
+                <label for="name">Name</label>
+                <input type="text" id="name" name="entry.226298979" placeholder="Your name here..." required>
+            </div>
+            
+            <div class="input-group">
+                <label for="semester">Semester</label>
+                <select id="semester" name="entry.50087362" required>
+                    <option value="" disabled selected>Select your semester</option>
+                    <option value="Semester - I">Semester - I</option>
+                    <option value="Semester - II">Semester - II</option>
+                    <option value="Semester - III">Semester - III</option>
+                    <option value="Semester - IV">Semester - IV</option>
+                    <option value="Semester - V">Semester - V</option>
+                    <option value="Semester - VI">Semester - VI</option>
+                    <option value="Semester - VII">Semester - VII</option>
+                    <option value="Semester - VIII">Semester - VIII</option>
+                </select>
+            </div>
+            
+            <div class="input-group">
+                <label for="department">Department</label>
+                <select id="department" name="entry.1179807191" required>
+                    <option value="" disabled selected>Select your department</option>
+                    <option value="History">History</option>
+                    <option value="Political Science">Political Science</option>
+                    <option value="Economics">Economics</option>
+                    <option value="Urdu">Urdu</option>
+                    <option value="Hindi">Hindi</option>
+                    <option value="English">English</option>
+                    <option value="Philosophy">Philosophy</option>
+                    <option value="Psychology">Psychology</option>
+                    <option value="Sociology">Sociology</option>
+                    <option value="Zoology">Zoology</option>
+                    <option value="Botany">Botany</option>
+                    <option value="Math">Math</option>
+                    <option value="Physics">Physics</option>
+                    <option value="Chemistry">Chemistry</option>
+                </select>
+            </div>
+            
+            <div class="input-group">
+                <label for="mjc">MJC Subject (Write with Subject Code)</label>
+                <input type="text" id="mjc" name="entry.863243574" placeholder="e.g., MJC-1 History">
+                <div id="mjcValidation" class="validation-message"></div>
+            </div>
+            
+            <div class="input-group">
+                <label for="mic">MIC Subject</label>
+                <input type="text" id="mic" name="entry.406899102" placeholder="e.g., MIC-1 Hindi">
+                <div id="micValidation" class="validation-message"></div>
+            </div>
+            
+            <button type="submit" class="btn">Submit Request</button>
+        </form>
+
+        <div id="successPopup" class="popup">
+            <p>Your submission has succeeded, please wait for 3 days.</p>
+            <button class="btn" onclick="closePopup()">OK</button>
+        </div>
+        
+        <iframe name="hiddenIframe" id="hiddenIframe" style="display:none;"></iframe>
+    </div>
+
+    <script>
+        // Define your "local database" of available subjects.
+        // Make sure these strings exactly match the format you expect users to type,
+        // (e.g., "MJC-1 History" vs "MJC-1 history"). Case-insensitivity is handled.
+        const availableSubjects = [
+            "MJC-1 History",
+            "MJC-1 Political Science",
+            "MJC-1 Economics",
+        ];
+
+        // Get references to HTML elements once the DOM is ready
+        const mjcInput = document.getElementById('mjc');
+        const micInput = document.getElementById('mic');
+        const mjcValidation = document.getElementById('mjcValidation');
+        const micValidation = document.getElementById('micValidation');
+        const popup = document.getElementById('successPopup');
+        const form = document.getElementById('subjectForm');
+        const hiddenIframe = document.getElementById('hiddenIframe');
+
+        /**
+         * Validates a subject input field against the availableSubjects list.
+         * Displays a message indicating if the subject is already available or not.
+         * @param {HTMLInputElement} inputElement The input field (e.g., mjcInput, micInput).
+         * @param {HTMLDivElement} validationMessageDiv The div to display validation messages.
+         */
+        function validateSubject(inputElement, validationMessageDiv) {
+            const inputValue = inputElement.value.trim(); // Remove leading/trailing whitespace
+
+            // If the input is empty, hide the message and clear its content/classes
+            if (inputValue === "") {
+                validationMessageDiv.style.display = 'none';
+                validationMessageDiv.textContent = "";
+                validationMessageDiv.classList.remove('available', 'not-available');
+                return; // Exit the function, no validation needed for empty input
+            }
+
+            // Convert the input value to lowercase for case-insensitive comparison
+            const lowerCaseInputValue = inputValue.toLowerCase();
+
+            // Check if ANY subject in the 'availableSubjects' list matches the input (case-insensitively)
+            const isSubjectAlreadyAvailable = availableSubjects.some(subject =>
+                subject.toLowerCase() === lowerCaseInputValue
+            );
+
+            // Make the validation message div visible
+            validationMessageDiv.style.display = 'block';
+            // Remove any previous status classes to ensure only the correct one is applied
+            validationMessageDiv.classList.remove('available', 'not-available');
+
+            if (isSubjectAlreadyAvailable) {
+                // If the subject is found in the availableSubjects list
+                validationMessageDiv.textContent = 'यह विषय पहले से उपलब्ध है। कृपया वेबसाइट पर देखें।';
+                validationMessageDiv.classList.add('available'); // Apply green color class
+            } else {
+                // If the subject is NOT found in the availableSubjects list
+                validationMessageDiv.textContent = 'ye subject available nhi Request daal skte ho';
+                validationMessageDiv.classList.add('not-available'); // Apply accent color class
+            }
+        }
+
+        /**
+         * Closes the success popup, resets the form, and reloads the page.
+         * Made globally accessible for the onclick attribute in HTML.
+         */
+        window.closePopup = function() {
+            popup.style.display = 'none'; // Hide the popup
+            form.reset(); // Reset all form fields (clears input values, resets select to default)
+            // Also hide the validation messages after form reset
+            mjcValidation.style.display = 'none';
+            micValidation.style.display = 'none';
+            location.reload(); // Reload the entire page for a clean state (optional, but good for simple forms)
+        };
+
+        // Event listener for when the entire HTML document is fully loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            // Attach 'input' event listeners to MJC and MIC subject fields for real-time validation
+            mjcInput.addEventListener('input', () => validateSubject(mjcInput, mjcValidation));
+            micInput.addEventListener('input', () => validateSubject(micInput, micValidation));
+
+            // Attach 'submit' event listener to the form
+            form.addEventListener('submit', (e) => {
+                e.preventDefault(); // Prevent the browser's default form submission (stops page reload)
+
+                // Programmatically submit the form to Google Forms via the hidden iframe.
+                // This sends the data without navigating away from the current page.
+                form.submit();
+
+                // Show the success popup after a short delay.
+                // This delay ensures the form data has a moment to be processed by the iframe/Google Forms.
+                setTimeout(() => {
+                    if (popup) {
+                        popup.style.display = 'block'; // Make the popup visible
+                        // Re-trigger CSS animation by temporarily changing properties and forcing a reflow
+                        popup.style.opacity = '0';
+                        popup.style.transform = 'translate(-50%, -60%) scale(0.9)';
+                        void popup.offsetWidth; // This line forces the browser to recalculate layout, re-triggering animation
+                        popup.style.opacity = '1';
+                        popup.style.transform = 'translate(-50%, -50%) scale(1)';
+                    } else {
+                        console.error('Error: Success popup element (successPopup) not found!');
+                    }
+                }, 500); // 500 milliseconds delay (adjust as needed)
+            });
+        });
+    </script>
+</body>
+</html>
